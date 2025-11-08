@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Enums\SourceEnums;
 use App\Services\SourceFactory;
 use App\Services\SourceService;
-use App\Services\SourceServices\NewsApiService;
 use Illuminate\Console\Command;
 
 class FetchArticles extends Command
@@ -30,10 +29,9 @@ class FetchArticles extends Command
     public function handle()
     {
         foreach (SourceEnums::cases() as $sourceName) {
-            $provider= SourceFactory::fromService($sourceName);
-            $service= new SourceService($provider);
+            $provider = SourceFactory::fromService($sourceName);
+            $service = new SourceService($provider);
             $service->InsertArticles();
         }
-
     }
 }

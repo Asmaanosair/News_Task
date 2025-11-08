@@ -6,9 +6,6 @@ use App\Interfaces\NewsInterface;
 
 class NewsApiService implements NewsInterface
 {
-    /**
-     * @return array
-     */
     public function fetchArticles(): array
     {
         return [

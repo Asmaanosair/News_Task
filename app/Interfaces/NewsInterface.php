@@ -8,5 +8,4 @@ interface NewsInterface
      * @return mixed
      */
     public function fetchArticles(): array;
-
 }
