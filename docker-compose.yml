@@ -1,0 +1,41 @@
+version: "3.7"
+
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: docker/app/Dockerfile
+    image: news_task
+    ports:
+      - "9000:9000"
+    container_name: news_task
+    restart: unless-stopped
+    working_dir: /var/www/
+    depends_on:
+      - sqlite
+    volumes:
+      - ./:/var/www
+
+  sqlite:
+    image: nouchka/sqlite3:latest
+    container_name: news_task_db
+    stdin_open: true
+    tty: true
+    volumes:
+      - db:/root/db/
+
+  nginx:
+    image: nginx:alpine
+    container_name: news_task_nginx
+    restart: unless-stopped
+    depends_on:
+      - sqlite
+      - app
+    ports:
+      - '80:80'
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx:/etc/nginx/conf.d
+
+volumes:
+  db:
