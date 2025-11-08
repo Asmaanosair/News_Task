@@ -5,7 +5,7 @@ namespace App\Interfaces;
 interface NewsInterface
 {
     /**
-     * @return mixed
+     * @return array
      */
     public function fetchArticles(): array;
 }

@@ -4,5 +4,9 @@ namespace App\Interfaces;
 
 interface ArticleInterface
 {
-    public function InsertOrUpdate($data);
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function InsertOrUpdate($data): mixed;
 }
