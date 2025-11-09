@@ -9,17 +9,18 @@ class ArticleRepository implements ArticleInterface
 {
     /**
      * @param $data
-     * @return mixed
+     * @return true
      */
-    public function insertOrUpdate($data): mixed
+    public function insertOrUpdate($data): true
     {
         $chunkSize = 1000;
-        foreach (array_chunk($data, $chunkSize) as $chunk) {
-            DB::table('articles')->upsert(
-                $chunk,
-                ['source_name', 'source_id'],
-                ['category', 'author', 'published_at', 'title']
-            );
-        }
+            foreach (array_chunk($data, $chunkSize) as $chunk) {
+                DB::table('articles')->upsert(
+                    $chunk,
+                    ['source', 'source_id'],
+                    ['title', 'snippet', 'content', 'image', 'author', 'category']
+                );
+            }
+            return true;
     }
 }

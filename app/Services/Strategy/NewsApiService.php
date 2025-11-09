@@ -12,6 +12,7 @@ class NewsApiService implements NewsInterface
      */
     protected NewsApi $newsApi;
 
+
     public function __construct()
     {
         $this->newsApi = new NewsApi();
@@ -19,9 +20,26 @@ class NewsApiService implements NewsInterface
 
     public function fetchArticles(): array
     {
-        return [
-            ['id' => 1, 'title' => 'NewsApi', 'category' => 'Technology', 'author' => 'John'],
-            ['id' => 2, 'title' => 'NewsApi', 'category' => 'Science', 'author' => 'Alice'],
+        $articles= [
+            [
+                'uid' => 501,
+                'title_text' => 'Economy grows 5%',
+                'short_description' => 'The global economy grew by 5% this year...',
+                'full_text' => 'Detailed report on economic growth...',
+                'thumbnail' => 'https://picsum.photos/600/250?opennews1',
+                'author_name' => 'Emma Brown',
+                'category_name' => 'Business',
+            ],
+            [
+                'uid' => 502,
+                'title_text' => 'Health benefits of meditation',
+                'short_description' => 'Meditation can reduce stress and anxiety...',
+                'full_text' => 'Complete article on meditation...',
+                'thumbnail' => null,
+                'author_name' => 'David Wilson',
+                'category_name' => 'Health',
+            ],
         ];
+        return array_map([$this->newsApi, 'transform'], $articles);
     }
 }
