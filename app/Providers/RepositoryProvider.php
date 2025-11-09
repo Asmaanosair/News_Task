@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Http\Repository\ArticleRepository;
 use App\Interfaces\ArticleInterface;
+use App\Repository\ArticleRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryProvider extends ServiceProvider
@@ -14,7 +14,6 @@ class RepositoryProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(ArticleInterface::class, ArticleRepository::class);
-
     }
 
     /**

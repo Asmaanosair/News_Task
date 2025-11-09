@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Jobs;
+
 use App\Services\SourceFactory;
 use App\Services\SourceService;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -9,7 +10,8 @@ use Illuminate\Foundation\Queue\Queueable;
 class FetchArticlesJob implements ShouldQueue
 {
     use Queueable;
-    public  string $source ;
+
+    public string $source;
 
     /**
      * Create a new job instance.

@@ -8,6 +8,7 @@ use App\Interfaces\NewsInterface;
 class SourceService
 {
     protected NewsInterface $provider;
+
     protected ArticleInterface $repository;
 
     /**
