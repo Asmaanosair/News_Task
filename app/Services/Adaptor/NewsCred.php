@@ -22,6 +22,7 @@ class NewsCred
             'source_id' => $article['article_id'],
             'author' => $article['writer'] ?? 'no author',
             'category' => $article['topic'] ?? null,
+            'published_at' =>now()->toISOString(),
         ];
     }
 }

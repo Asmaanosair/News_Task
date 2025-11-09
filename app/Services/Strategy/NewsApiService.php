@@ -3,43 +3,44 @@
 namespace App\Services\Strategy;
 
 use App\Interfaces\NewsInterface;
-use App\Services\Adaptor\NewsApi;
+use App\Services\Adaptor\NewsApi as AdaptorNewsApi;
+use Exception;
+use Illuminate\Support\Facades\Log;
+use jcobhams\NewsApi\NewsApi;
 
 class NewsApiService implements NewsInterface
 {
     /**
-     * @var NewsApi
+     * @var AdaptorNewsApi
      */
-    protected NewsApi $newsApi;
+    protected AdaptorNewsApi $newsApi;
 
     public function __construct()
     {
-        $this->newsApi = new NewsApi();
+        $this->newsApi = new AdaptorNewsApi();
     }
 
     public function fetchArticles(): array
     {
-        $articles = [
-            [
-                'uid' => 501,
-                'title_text' => 'Economy grows 5%',
-                'short_description' => 'The global economy grew by 5% this year...',
-                'full_text' => 'Detailed report on economic growth...',
-                'thumbnail' => 'https://picsum.photos/600/250?opennews1',
-                'author_name' => 'Emma Brown',
-                'category_name' => 'Business',
-            ],
-            [
-                'uid' => 502,
-                'title_text' => 'Health benefits of meditation',
-                'short_description' => 'Meditation can reduce stress and anxiety...',
-                'full_text' => 'Complete article on meditation...',
-                'thumbnail' => null,
-                'author_name' => 'David Wilson',
-                'category_name' => 'Health',
-            ],
-        ];
+        $api_key = config('services.news_api.key');
+        $newsApi = new NewsApi($api_key);
+        try {
+            $response = $newsApi->getTopHeadlines(
+                country: 'us',
+                page_size: 100,
+                page: 1
+            );
+            if ($response->status !== 'ok' || empty($response->articles)) {
+                Log::warning('NewsAPI: No top headlines found');
 
-        return array_map([$this->newsApi, 'transform'], $articles);
+                return [];
+            }
+
+            return array_map([$this->newsApi, 'transform'], $response->articles);
+        } catch (Exception $exception) {
+            Log::error('NewsAPI fetch failed', ['error' => $exception->getMessage()]);
+
+            return [];
+        }
     }
 }

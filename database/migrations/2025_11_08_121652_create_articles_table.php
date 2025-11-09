@@ -20,6 +20,7 @@ return new class() extends Migration {
             $table->string('source_id')->nullable();
             $table->string('author')->nullable();
             $table->string('category')->nullable();
+            $table->timestamp('published_at')->nullable();
             $table->unique(['source', 'source_id']);
             $table->timestamps();
         });
