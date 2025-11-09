@@ -29,7 +29,8 @@ class FetchArticles extends Command
      */
     public function handle(): void
     {
-        foreach (SourceEnums::SOURCE_TYPE as $sourceName) {
+        foreach (SourceEnums::all() as $sourceName) {
+            \Log::info("Fetching articles from {$sourceName}");
            FetchArticlesJob::dispatch($sourceName);
         }
     }

@@ -8,5 +8,5 @@ interface ArticleInterface
      * @param $data
      * @return mixed
      */
-    public function InsertOrUpdate($data): mixed;
+    public function insertOrUpdate($data): mixed;
 }
