@@ -12,7 +12,6 @@ class NewsApiService implements NewsInterface
      */
     protected NewsApi $newsApi;
 
-
     public function __construct()
     {
         $this->newsApi = new NewsApi();
@@ -20,7 +19,7 @@ class NewsApiService implements NewsInterface
 
     public function fetchArticles(): array
     {
-        $articles= [
+        $articles = [
             [
                 'uid' => 501,
                 'title_text' => 'Economy grows 5%',
@@ -40,6 +39,7 @@ class NewsApiService implements NewsInterface
                 'category_name' => 'Health',
             ],
         ];
+
         return array_map([$this->newsApi, 'transform'], $articles);
     }
 }

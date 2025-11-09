@@ -18,10 +18,10 @@ class OpenNews
             'snippet' => Str::limit($article['description'] ?? '', 500, '...'),
             'content' => $article['content'] ?? 'no content',
             'image' => $article['urlToImage'] ?? 'https://picsum.photos/600/250',
-            'source' =>SourceEnums::OPEN_NEW,
+            'source' =>SourceEnums::OPEN_NEW->value,
             'source_id' => $article['id'],
             'author' => $article['author'] ?? 'no author',
-            'category' => $article['category'] ?? null ,
+            'category' => $article['category'] ?? null,
         ];
     }
 }

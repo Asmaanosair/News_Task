@@ -19,7 +19,7 @@ class OpenNewsService implements NewsInterface
 
     public function fetchArticles(): array
     {
-        $articles= [
+        $articles = [
             [
                 'id' => 1,
                 'title' => 'Tesla launches new model',
@@ -39,6 +39,7 @@ class OpenNewsService implements NewsInterface
                 'category' => 'Science',
             ],
         ];
+
         return array_map([$this->openNews, 'transform'], $articles);
     }
 }

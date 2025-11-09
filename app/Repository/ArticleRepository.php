@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Repository;
+namespace App\Repository;
 
 use App\Interfaces\ArticleInterface;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class ArticleRepository implements ArticleInterface
@@ -10,7 +11,7 @@ class ArticleRepository implements ArticleInterface
     /**
      * @param $data
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function insertOrUpdate($data): bool
     {
@@ -29,8 +30,7 @@ class ArticleRepository implements ArticleInterface
             });
 
             return true;
-        } catch (\Exception $e) {
-            \Log::error('Failed to insert articles', ['error' => $e->getMessage()]);
+        } catch (Exception $e) {
             throw $e;
         }
     }

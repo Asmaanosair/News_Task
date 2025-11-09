@@ -18,8 +18,8 @@ class NewsCred
             'snippet' => Str::limit($article['summary'] ?? '', 500, '...'),
             'content' => $article['body'] ?? 'no content',
             'image' => $article['image_url'] ?? 'https://picsum.photos/600/250',
-            'source' => SourceEnums::NEWS_CRED,
-            'source_id' => $article['article_id'] ,
+            'source' => SourceEnums::NEWS_CRED->value,
+            'source_id' => $article['article_id'],
             'author' => $article['writer'] ?? 'no author',
             'category' => $article['topic'] ?? null,
         ];

@@ -19,7 +19,7 @@ class NewsCredService implements NewsInterface
 
     public function fetchArticles(): array
     {
-        $articles= [
+        $articles = [
             [
                 'article_id' => 'NC-101',
                 'headline' => 'Global Warming Update',
@@ -41,6 +41,7 @@ class NewsCredService implements NewsInterface
                 'date_published' => '2024-12-19T12:00:00Z',
             ],
         ];
+
         return array_map([$this->newsCred, 'transform'], $articles);
     }
 }
