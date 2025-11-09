@@ -75,7 +75,7 @@ class ArticleRepository implements ArticleInterface
         return $this->query->keyword($keyword);
     }
 
-    public function orderBy(): \Illuminate\Database\Eloquent\Builder|Builder
+    public function orderBy(): Builder
     {
         return $this->query->orderBy('published_at', 'desc');
     }

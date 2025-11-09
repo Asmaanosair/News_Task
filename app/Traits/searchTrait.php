@@ -11,6 +11,9 @@ trait searchTrait
         }
         $columns = implode(',', $this->searchColumns);
 
-        return $query->whereRaw("CONCAT_WS(' ', {$columns}) like '%{$keyword}%'");
+        return $query->whereRaw(
+            "CONCAT_WS(' ', {$columns}) like ?",
+            ["%{$keyword}%"]
+        );
     }
 }
