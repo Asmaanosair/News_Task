@@ -6,7 +6,12 @@ interface ArticleInterface
 {
     /**
      * @param $data
-     * @return mixed
      */
-    public function insertOrUpdate($data): mixed;
+    public function insertOrUpdate($data);
+
+    public function getArticles(array $filters = [], int $perPage = 20);
+
+    public function search($keyword);
+
+    public function orderBy();
 }

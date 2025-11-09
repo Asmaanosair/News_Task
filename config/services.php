@@ -34,5 +34,22 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'news_api' => [
+        'key' => env('NEWS_API_KEY'),
+        'sources' => env('NEWS_API_SOURCES', 'bbc-news,cnn,the-guardian'),
+        'language' => env('NEWS_API_LANGUAGE', 'en'),
+        'page_size' => env('NEWS_API_PAGE_SIZE', 100),
+        'days_back' => env('NEWS_API_DAYS_BACK', 7),
+    ],
+
+    'news_cred' => [
+        'key' => env('NEWS_CRED_API_KEY'),
+        'base_url' => env('NEWS_CRED_BASE_URL', 'https://api.newscred.com'),
+    ],
+
+    'open_news' => [
+        'key' => env('OPEN_NEWS_API_KEY'),
+        'base_url' => env('OPEN_NEWS_BASE_URL', 'https://api.opennews.com'),
+    ],
 
 ];

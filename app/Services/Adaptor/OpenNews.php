@@ -22,6 +22,7 @@ class OpenNews
             'source_id' => $article['id'],
             'author' => $article['author'] ?? 'no author',
             'category' => $article['category'] ?? null,
+            'published_at' => now()->toISOString(),
         ];
     }
 }
