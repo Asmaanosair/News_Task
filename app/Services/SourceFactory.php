@@ -3,9 +3,9 @@
 namespace App\Services;
 
 use App\Enums\SourceEnums;
-use App\Services\SourceServices\NewsApiService;
-use App\Services\SourceServices\NewsCredService;
-use App\Services\SourceServices\OpenNewsService;
+use App\Services\Strategy\NewsApiService;
+use App\Services\Strategy\NewsCredService;
+use App\Services\Strategy\OpenNewsService;
 use InvalidArgumentException;
 
 class SourceFactory

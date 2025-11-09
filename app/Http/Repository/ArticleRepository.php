@@ -7,7 +7,11 @@ use Illuminate\Support\Facades\DB;
 
 class ArticleRepository implements ArticleInterface
 {
-    public function InsertOrUpdate($data): void
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function insertOrUpdate($data): mixed
     {
         $chunkSize = 1000;
         foreach (array_chunk($data, $chunkSize) as $chunk) {

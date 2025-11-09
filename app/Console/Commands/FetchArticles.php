@@ -26,12 +26,12 @@ class FetchArticles extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         foreach (SourceEnums::cases() as $sourceName) {
             $provider = SourceFactory::fromService($sourceName);
             $service = new SourceService($provider);
-            $service->InsertArticles();
+            $service->insertArticles();
         }
     }
 }

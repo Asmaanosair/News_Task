@@ -1,11 +1,22 @@
 <?php
 
-namespace App\Services\SourceServices;
+namespace App\Services\Strategy;
 
 use App\Interfaces\NewsInterface;
+use App\Services\Adaptor\NewsApi;
 
 class NewsApiService implements NewsInterface
 {
+    /**
+     * @var NewsApi
+     */
+    protected NewsApi $newsApi;
+
+    public function __construct()
+    {
+        $this->newsApi = new NewsApi();
+    }
+
     public function fetchArticles(): array
     {
         return [
