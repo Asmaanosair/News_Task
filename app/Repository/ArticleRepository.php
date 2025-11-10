@@ -50,26 +50,36 @@ class ArticleRepository implements ArticleInterface
         }
     }
 
+    /**
+     * @param array $filters
+     * @param int $perPage
+     * @param string $orderBy
+     * @param string $direction
+     * @return LengthAwarePaginator
+     */
+
     public function getArticles(array $filters = [], int $perPage = 20, string $orderBy = 'published_at', string $direction = 'desc'): LengthAwarePaginator
     {
-        $query = $this->query;
-        if ( ! empty($filters['category'])) {
+        // Create fresh query instance to avoid state pollution
+        $query = $this->article->newQuery();
+        
+        if (!empty($filters['category'])) {
             $query->category($filters['category']);
         }
-        if ( ! empty($filters['source'])) {
+        if (!empty($filters['source'])) {
             $query->source($filters['source']);
         }
-        if ( ! empty($filters['author'])) {
+        if (!empty($filters['author'])) {
             $query->author($filters['author']);
         }
-        if ( ! empty($filters['date'])) {
+        if (!empty($filters['date'])) {
             $query->date($filters['date']);
         }
-        if ( ! empty($filters['keyword'])) {
+        if (!empty($filters['keyword'])) {
             $query->keyword($filters['keyword']);
         }
 
-        return $this->orderBy($orderBy, $direction)->paginate($perPage);
+        return $query->orderBy($orderBy, $direction)->paginate($perPage);
     }
 
     public function search($keyword): Builder
@@ -79,6 +89,6 @@ class ArticleRepository implements ArticleInterface
 
     public function orderBy($orderBy, $direction): Builder
     {
-        return $this->query->orderBy($orderBy, 'desc');
+        return $this->query->orderBy($orderBy,$direction );
     }
 }

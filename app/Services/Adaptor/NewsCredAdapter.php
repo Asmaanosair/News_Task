@@ -5,6 +5,7 @@ namespace App\Services\Adaptor;
 use App\DTOs\ArticleDTO;
 use App\Enums\SourceEnums;
 use App\Interfaces\NewsAdapterInterface;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -18,15 +19,17 @@ class NewsCredAdapter implements NewsAdapterInterface
     public function transform(array $article): array
     {
         return ArticleDTO::fromArray([
-            'title' => $article['headline'],
-            'snippet' => Str::limit($article['summary'] ?? '', 500, '...'),
-            'content' => $article['body'] ?? 'no content',
-            'image' => $article['image_url'] ?? 'https://picsum.photos/600/250',
-            'source' => SourceEnums::NEWS_CRED->value,
-            'source_id' => $article['article_id'],
-            'author' => $article['writer'] ?? 'no author',
-            'category' => $article['topic'] ?? null,
-            'published_at' =>now()->format('Y-m-d H:i:s'),
+            'title' => $article['title'] ?? 'No Title',
+            'snippet' => Str::limit($article['abstract'] ?? '', 500, '...'),
+            'content' => $article['abstract'] ?? 'No content',
+            'image' => $article['multimedia'][0]['url'] ?? 'https://picsum.photos/600/250',
+            'source' => SourceEnums::OPEN_NEW->value,
+            'source_id' => $article['uri'] ?? md5($article['url'] ?? uniqid()),
+            'author' => str_replace('By ', '', $article['byline'] ?? 'Unknown'),
+            'category' => $article['section'] ?? null,
+            'published_at' => isset($article['published_date'])
+                ? Carbon::parse($article['published_date'])->format('Y-m-d H:i:s')
+                : now()->format('Y-m-d H:i:s'),
         ])->toArray();
     }
 }

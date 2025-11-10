@@ -52,5 +52,10 @@ return [
         'key' => env('OPEN_NEWS_API_KEY'),
         'base_url' => env('OPEN_NEWS_BASE_URL', 'https://api.opennews.com'),
     ],
+    'nyt_api' => [
+        'key' => env('NYT_API_KEY'),
+        'base_url' => env('NYT_API_BASE_URL', 'https://api.nytimes.com/svc/topstories/v2'),
+        'section' => env('NYT_API_SECTION', 'home'),
+    ],
 
 ];

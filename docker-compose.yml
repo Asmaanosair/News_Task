@@ -6,36 +6,30 @@ services:
       context: ./
       dockerfile: docker/app/Dockerfile
     image: news_task
-    ports:
-      - "9000:9000"
     container_name: news_task
     restart: unless-stopped
-    working_dir: /var/www/
-    depends_on:
-      - sqlite
+    working_dir: /var/www
     volumes:
       - ./:/var/www
-
-  sqlite:
-    image: nouchka/sqlite3:latest
-    container_name: news_task_db
-    stdin_open: true
-    tty: true
-    volumes:
-      - db:/root/db/
+    expose:
+      - "9000"
+    networks:
+      - app_net
 
   nginx:
     image: nginx:alpine
     container_name: news_task_nginx
     restart: unless-stopped
     depends_on:
-      - sqlite
       - app
     ports:
-      - '8080:80'
+      - "9090:80"
     volumes:
       - ./:/var/www
       - ./docker/nginx:/etc/nginx/conf.d
+    networks:
+      - app_net
 
-volumes:
-  db:
+networks:
+  app_net:
+    driver: bridge

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ArticleFilterRequest;
 use App\Http\Resources\ArticleResource;
 use App\Interfaces\ArticleInterface;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ArticleController extends Controller
@@ -39,7 +39,7 @@ class ArticleController extends Controller
      *         @OA\Schema(
      *             type="string",
      *             enum={"news_api", "news_cred", "open_news"},
-     *             example="news_api"
+     *             example=""
      *         )
      *     ),
      *     @OA\Parameter(
@@ -47,21 +47,21 @@ class ArticleController extends Controller
      *         in="query",
      *         description="Filter by author name",
      *         required=false,
-     *         @OA\Schema(type="string", example="John Doe")
+     *         @OA\Schema(type="string", example="")
      *     ),
      *     @OA\Parameter(
      *         name="date",
      *         in="query",
      *         description="Filter by publication date (YYYY-MM-DD)",
      *         required=false,
-     *         @OA\Schema(type="string", format="date", example="2025-11-09")
+     *         @OA\Schema(type="string", format="date", example="")
      *     ),
      *     @OA\Parameter(
      *         name="keyword",
      *         in="query",
      *         description="Search keyword in title or content",
      *         required=false,
-     *         @OA\Schema(type="string", example="AI")
+     *         @OA\Schema(type="string", example="")
      *     ),
      *     @OA\Parameter(
      *         name="orderBy",
@@ -71,7 +71,7 @@ class ArticleController extends Controller
      *         @OA\Schema(
      *             type="string",
      *             enum={"published_at", "title", "created_at"},
-     *             example="published_at"
+     *             example=""
      *         )
      *     ),
      *     @OA\Parameter(
@@ -82,7 +82,7 @@ class ArticleController extends Controller
      *         @OA\Schema(
      *             type="string",
      *             enum={"asc", "desc"},
-     *             example="desc"
+     *             example=""
      *         )
      *     ),
      *     @OA\Parameter(
@@ -90,7 +90,7 @@ class ArticleController extends Controller
      *         in="query",
      *         description="Number of items per page",
      *         required=false,
-     *         @OA\Schema(type="integer", example=20)
+     *         @OA\Schema(type="integer", example=null)
      *     ),
      *     @OA\Response(
      *         response=200,
@@ -146,10 +146,13 @@ class ArticleController extends Controller
      *     )
      * )
      */
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(ArticleFilterRequest $request): AnonymousResourceCollection
     {
         $filters = $request->only(['category', 'source', 'author', 'date', 'keyword']);
-        $articles = $this->repository->getArticles($filters);
+        $perPage = $request->input('perPage', 20);
+        $orderBy = $request->input('orderBy', 'published_at');
+        $direction = $request->input('direction', 'desc');
+        $articles = $this->repository->getArticles($filters, $perPage, $orderBy, $direction);
 
         return ArticleResource::collection($articles);
     }

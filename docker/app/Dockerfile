@@ -1,50 +1,30 @@
 FROM php:8.3-fpm
-RUN echo "Install COMPOSER"
-RUN cd /tmp \
-    && curl -sS https://getcomposer.org/installer -o composer-setup.php \
-    && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
-    && rm composer-setup.php
 
-RUN docker-php-ext-install pdo pdo_mysql
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- \
+    --install-dir=/usr/local/bin --filename=composer
 
-RUN apt-get update && apt-get -y install apt-utils nano wget dialog vim
+# Install required system libraries and PHP extensions
+RUN apt-get update && apt-get install -y \
+    git curl zip unzip libzip-dev zlib1g-dev libicu-dev libxml2-dev libsqlite3-dev \
+    && docker-php-ext-install pdo pdo_sqlite intl zip xml \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN echo "Install important libraries"
-RUN apt-get -y install --fix-missing \
-    apt-utils \
-    build-essential \
-    git \
-    curl \
-    libcurl4 \
-    libcurl4-openssl-dev \
-    zlib1g-dev \
-    libzip-dev \
-    zip \
-    libbz2-dev \
-    locales \
-    libmcrypt-dev \
-    libicu-dev \
-    libonig-dev \
-    libxml2-dev
-
-RUN apt-get install -y libpq-dev \
-    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install pdo pdo_pgsql pgsql
-
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
+# Set working directory
 WORKDIR /var/www
 
-# Install nodejs and npm
-RUN curl -sL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh
-RUN ["sh",  "./nodesource_setup.sh"]
-
-RUN apt-get -y install nodejs
-
+# Expose PHP-FPM port (TCP 9000)
 EXPOSE 9000
 
-CMD ["php-fpm"]
+# Copy custom entrypoint script (if any)
 COPY docker/app/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
+# Configure PHP-FPM to listen on TCP instead of socket
+RUN sed -i 's|listen = .*|listen = 9000|' /usr/local/etc/php-fpm.d/www.conf
+# Fix permissions for Laravel directories
+RUN mkdir -p /var/www/storage /var/www/bootstrap/cache \
+    && chown -R www-data:www-data /var/www \
+    && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD ["php-fpm", "-F"]
