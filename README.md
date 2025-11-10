@@ -8,7 +8,7 @@ A Laravel project to fetch and manage articles from multiple news sources with f
 
 ### 1. Clone and Configure
 ```bash
-git clone <repository-url>
+git clone git@github.com:Asmaanosair/News_Task.git
 cd news_task
 ```
 ### 2. Run with Docker
