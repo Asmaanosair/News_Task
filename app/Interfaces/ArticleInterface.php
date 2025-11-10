@@ -14,7 +14,5 @@ interface ArticleInterface
 
     public function getArticles(array $filters = [], int $perPage = 20, string $orderBy = 'published_at', string $direction = 'desc'): LengthAwarePaginator;
 
-    public function search($keyword): Builder;
-
     public function orderBy($orderBy, $direction): Builder;
 }

@@ -62,7 +62,7 @@ class ArticleRepository implements ArticleInterface
     {
         // Create fresh query instance to avoid state pollution
         $query = $this->article->newQuery();
-        
+
         if (!empty($filters['category'])) {
             $query->category($filters['category']);
         }
@@ -82,11 +82,11 @@ class ArticleRepository implements ArticleInterface
         return $query->orderBy($orderBy, $direction)->paginate($perPage);
     }
 
-    public function search($keyword): Builder
-    {
-        return $this->query->keyword($keyword);
-    }
-
+    /**
+     * @param $orderBy
+     * @param $direction
+     * @return Builder
+     */
     public function orderBy($orderBy, $direction): Builder
     {
         return $this->query->orderBy($orderBy,$direction );

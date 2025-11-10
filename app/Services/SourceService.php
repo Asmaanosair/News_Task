@@ -24,7 +24,7 @@ readonly class SourceService
     {
         $provider = SourceFactory::fromService($source->value);
         $articles = $provider->fetchArticles();
-        $adapter = SourceFactory::fromAdapter($source->value);
+        $adapter = AdapterFactory::fromAdapter($source->value);
         $data = $this->transformWithValidation($articles, $adapter, $source);
         $validData = array_filter($data);
         if (!empty($validData)) {

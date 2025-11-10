@@ -13,20 +13,19 @@ use App\Services\Strategy\NewsCredService;
 use App\Services\Strategy\OpenNewsService;
 use InvalidArgumentException;
 
-class SourceFactory
+class AdapterFactory
 {
     /**
      * @param $source
-     * @return NewsInterface
+     * @return NewsAdapterInterface
      */
-    public static function fromService($source): NewsInterface
+    public static function fromAdapter($source): NewsAdapterInterface
     {
         return match ($source) {
-            SourceEnums::NEWS_API->value => new NewsApiService(),
-            SourceEnums::NEWS_CRED->value => new NewsCredService(),
-            SourceEnums::OPEN_NEW->value => new OpenNewsService(),
+            SourceEnums::NEWS_API->value => new NewsApiAdapter(),
+            SourceEnums::NEWS_CRED->value => new NewsCredAdapter(),
+            SourceEnums::OPEN_NEW->value => new OpenNewsAdapter(),
             default => throw new InvalidArgumentException("Unknown Source :  $source"),
         };
     }
-
 }
