@@ -31,12 +31,6 @@ readonly class SourceService
         if ( ! empty($validData)) {
             $this->repository->insertOrUpdate($validData);
         }
-        Log::info("Articles processed from {$source->value}", [
-            'total' => count($articles),
-            'valid' => count($validData),
-            'failed' => count($articles) - count($validData),
-        ]);
-
         return $validData;
     }
 
