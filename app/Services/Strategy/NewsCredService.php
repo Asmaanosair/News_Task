@@ -19,14 +19,15 @@ class NewsCredService implements NewsInterface
         $section = config('services.nyt_api.section');
         try {
             $response = Http::get("{$baseUrl}/{$section}.json", [
-                'api-key' => $apiKey
+                'api-key' => $apiKey,
             ]);
 
-            if (!$response->successful()) {
+            if ( ! $response->successful()) {
                 Log::warning('NYT API: Request failed', [
                     'status' => $response->status(),
-                    'body' => $response->body()
+                    'body' => $response->body(),
                 ]);
+
                 return [];
             }
 
@@ -34,14 +35,15 @@ class NewsCredService implements NewsInterface
 
             if (empty($data['results'])) {
                 Log::warning('OpenNews: No articles found');
+
                 return [];
             }
 
             return $data['results'];
-
         } catch (Throwable $e) {
             Log::error('OpenNews fetch failed');
             report($e);
+
             return [];
         }
     }

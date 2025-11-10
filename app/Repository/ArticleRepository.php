@@ -46,6 +46,7 @@ class ArticleRepository implements ArticleInterface
         } catch (Throwable $e) {
             Log::error('Failed to insert articles ArticleRepository ');
             report($e);
+
             return [];
         }
     }
@@ -57,25 +58,24 @@ class ArticleRepository implements ArticleInterface
      * @param string $direction
      * @return LengthAwarePaginator
      */
-
     public function getArticles(array $filters = [], int $perPage = 20, string $orderBy = 'published_at', string $direction = 'desc'): LengthAwarePaginator
     {
         // Create fresh query instance to avoid state pollution
         $query = $this->article->newQuery();
 
-        if (!empty($filters['category'])) {
+        if ( ! empty($filters['category'])) {
             $query->category($filters['category']);
         }
-        if (!empty($filters['source'])) {
+        if ( ! empty($filters['source'])) {
             $query->source($filters['source']);
         }
-        if (!empty($filters['author'])) {
+        if ( ! empty($filters['author'])) {
             $query->author($filters['author']);
         }
-        if (!empty($filters['date'])) {
+        if ( ! empty($filters['date'])) {
             $query->date($filters['date']);
         }
-        if (!empty($filters['keyword'])) {
+        if ( ! empty($filters['keyword'])) {
             $query->keyword($filters['keyword']);
         }
 
@@ -89,6 +89,6 @@ class ArticleRepository implements ArticleInterface
      */
     public function orderBy($orderBy, $direction): Builder
     {
-        return $this->query->orderBy($orderBy,$direction );
+        return $this->query->orderBy($orderBy, $direction);
     }
 }

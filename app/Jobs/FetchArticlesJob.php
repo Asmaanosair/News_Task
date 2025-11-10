@@ -33,7 +33,7 @@ class FetchArticlesJob implements ShouldQueue
         try {
             $service->insertArticles($this->source);
         } catch (Throwable $e) {
-            Log::error('Failed to insert articles source: ' . $this->source->value);
+            Log::error('Failed to insert articles source: '.$this->source->value);
             report($e);
         }
     }

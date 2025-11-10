@@ -12,11 +12,11 @@ use Illuminate\Validation\ValidationException;
 class NewsCredAdapter implements NewsAdapterInterface
 {
     /**
-     * @param array $article
+     * @param array|object  $article
      * @return array
      * @throws ValidationException
      */
-    public function transform(array $article): array
+    public function transform(array|object  $article): array
     {
         return ArticleDTO::fromArray([
             'title' => $article['title'] ?? 'No Title',

@@ -37,7 +37,7 @@ readonly class ArticleDTO
             source_id: $validated['source_id'],
             author: $validated['author'] ?? 'Unknown',
             category: $validated['category'] ?? null,
-            published_at: $validated['published_at'] ?? now()->toISOString(),
+            published_at: $validated['published_at'] ?? now()->format('Y-m-d H:i:s'),
         );
     }
 

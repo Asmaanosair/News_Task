@@ -14,7 +14,8 @@ readonly class SourceService
      */
     public function __construct(
         private ArticleInterface $repository
-    ) {}
+    ) {
+    }
 
     /**
      * @param SourceEnums $source
@@ -27,13 +28,13 @@ readonly class SourceService
         $adapter = AdapterFactory::fromAdapter($source->value);
         $data = $this->transformWithValidation($articles, $adapter, $source);
         $validData = array_filter($data);
-        if (!empty($validData)) {
+        if ( ! empty($validData)) {
             $this->repository->insertOrUpdate($validData);
         }
         Log::info("Articles processed from {$source->value}", [
             'total' => count($articles),
             'valid' => count($validData),
-            'failed' => count($articles) - count($validData)
+            'failed' => count($articles) - count($validData),
         ]);
 
         return $validData;
@@ -45,7 +46,6 @@ readonly class SourceService
      * @param SourceEnums $source
      * @return array
      */
-
     private function transformWithValidation(array $articles, object $adapter, SourceEnums $source): array
     {
         return array_map(function ($article) use ($adapter, $source) {

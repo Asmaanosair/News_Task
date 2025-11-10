@@ -3,7 +3,6 @@
 namespace App\Services\Strategy;
 
 use App\Interfaces\NewsInterface;
-use Exception;
 use Illuminate\Support\Facades\Log;
 use jcobhams\NewsApi\NewsApi;
 use Throwable;
@@ -30,6 +29,7 @@ class NewsApiService implements NewsInterface
         } catch (Throwable $e) {
             Log::error('NewsAPI fetch failed ');
             report($e);
+
             return [];
         }
     }

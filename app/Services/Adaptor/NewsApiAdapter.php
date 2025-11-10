@@ -19,6 +19,7 @@ class NewsApiAdapter implements NewsAdapterInterface
     public function transform(array|object $article): array
     {
         $article = (array) $article;
+
         return ArticleDTO::fromArray([
             'title' => $article['title'] ?? 'No Title',
             'snippet' => Str::limit($article['description'] ?? '', 500, '...'),
@@ -28,7 +29,7 @@ class NewsApiAdapter implements NewsAdapterInterface
             'source_id' => md5($article['url'] ?? uniqid()),
             'author' => $article['author'] ?? 'Unknown',
             'category' => null,
-            'published_at' => Carbon::parse($article['publishedAt'])->format('Y-m-d H:i:s') ?? now()->format('Y-m-d H:i:s'),
+            'published_at' => Carbon::parse($article['publishedAt'])->format('Y-m-d H:i:s'),
         ])->toArray();
     }
 }

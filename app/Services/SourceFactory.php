@@ -3,11 +3,7 @@
 namespace App\Services;
 
 use App\Enums\SourceEnums;
-use App\Interfaces\NewsAdapterInterface;
 use App\Interfaces\NewsInterface;
-use App\Services\Adaptor\NewsApiAdapter;
-use App\Services\Adaptor\NewsCredAdapter;
-use App\Services\Adaptor\OpenNewsAdapter;
 use App\Services\Strategy\NewsApiService;
 use App\Services\Strategy\NewsCredService;
 use App\Services\Strategy\OpenNewsService;
@@ -28,5 +24,4 @@ class SourceFactory
             default => throw new InvalidArgumentException("Unknown Source :  $source"),
         };
     }
-
 }

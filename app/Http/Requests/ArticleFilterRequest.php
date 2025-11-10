@@ -19,7 +19,7 @@ class ArticleFilterRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array
      */
     public function rules(): array
     {
@@ -65,9 +65,8 @@ class ArticleFilterRequest extends FormRequest
             response()->json([
                 'success' => false,
                 'message' => 'Validation errors',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 422)
         );
     }
 }
-
