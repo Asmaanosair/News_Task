@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Feature;
 
 use App\Models\Article;
 use App\Repository\ArticleRepository;
