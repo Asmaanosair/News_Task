@@ -18,23 +18,133 @@ class ArticleController extends Controller
     }
 
     /**
-     * Display a listing of the articles.
-     *
-     * You can filter articles by providing any of the following optional query parameters:
-     * - `category` (string): Filter by article category. Example: `Technology`
-     * - `source` (string): Filter by source name. Example: `news_cred`
-     * - `author` (string): Filter by author name. Example: `Sarah Lee`
-     * - `date` (string - YYYY-MM-DD): Filter by publication date. Example: `2025-11-09`
-     * - `keyword` (string): Search for keyword in title or content. Example: `AI`
-     * - `orderBy` (string): Sort by column name. Example: `published_at`, `title`, `created_at`
-     * * - `direction` (string): Sort direction ('asc' or 'desc'). Default: `desc`
-     * * - `perPage` (int): Number of items per page. Default: `20`
-     * *
-     * Example request:
-     * GET /api/articles?source=news_cred&category=Technology&keyword=AI&perPage=50
-     * * GET /api/articles?orderBy=published_at&direction=desc&perPage=10
-     * @param  Request  $request
-     * @return AnonymousResourceCollection
+     * @OA\Get(
+     *     path="/api/articles",
+     *     operationId="getArticles",
+     *     tags={"Articles"},
+     *     summary="Get list of articles",
+     *     description="Returns paginated list of articles with optional filters",
+     *     @OA\Parameter(
+     *         name="category",
+     *         in="query",
+     *         description="Filter by article category",
+     *         required=false,
+     *         @OA\Schema(type="string", example="Technology")
+     *     ),
+     *     @OA\Parameter(
+     *         name="source",
+     *         in="query",
+     *         description="Filter by source name",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string",
+     *             enum={"news_api", "news_cred", "open_news"},
+     *             example="news_api"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="author",
+     *         in="query",
+     *         description="Filter by author name",
+     *         required=false,
+     *         @OA\Schema(type="string", example="John Doe")
+     *     ),
+     *     @OA\Parameter(
+     *         name="date",
+     *         in="query",
+     *         description="Filter by publication date (YYYY-MM-DD)",
+     *         required=false,
+     *         @OA\Schema(type="string", format="date", example="2025-11-09")
+     *     ),
+     *     @OA\Parameter(
+     *         name="keyword",
+     *         in="query",
+     *         description="Search keyword in title or content",
+     *         required=false,
+     *         @OA\Schema(type="string", example="AI")
+     *     ),
+     *     @OA\Parameter(
+     *         name="orderBy",
+     *         in="query",
+     *         description="Sort by column name",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string",
+     *             enum={"published_at", "title", "created_at"},
+     *             example="published_at"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="direction",
+     *         in="query",
+     *         description="Sort direction",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string",
+     *             enum={"asc", "desc"},
+     *             example="desc"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="perPage",
+     *         in="query",
+     *         description="Number of items per page",
+     *         required=false,
+     *         @OA\Schema(type="integer", example=20)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer", example=1),
+     *                     @OA\Property(property="title", type="string", example="Breaking News Title"),
+     *                     @OA\Property(property="snippet", type="string", example="This is a short snippet..."),
+     *                     @OA\Property(property="content", type="string", example="Full article content..."),
+     *                     @OA\Property(property="image", type="string", example="https://example.com/image.jpg"),
+     *                     @OA\Property(property="source", type="string", example="news_api"),
+     *                     @OA\Property(property="source_id", type="string", example="abc123"),
+     *                     @OA\Property(property="author", type="string", example="John Doe"),
+     *                     @OA\Property(property="category", type="string", example="Technology"),
+     *                     @OA\Property(property="published_at", type="string", format="date-time", example="2025-11-09T12:00:00Z"),
+     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2025-11-09T12:00:00Z"),
+     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2025-11-09T12:00:00Z")
+     *                 )
+     *             ),
+     *             @OA\Property(
+     *                 property="links",
+     *                 type="object",
+     *                 @OA\Property(property="first", type="string", example="http://localhost/api/articles?page=1"),
+     *                 @OA\Property(property="last", type="string", example="http://localhost/api/articles?page=10"),
+     *                 @OA\Property(property="prev", type="string", nullable=true),
+     *                 @OA\Property(property="next", type="string", example="http://localhost/api/articles?page=2")
+     *             ),
+     *             @OA\Property(
+     *                 property="meta",
+     *                 type="object",
+     *                 @OA\Property(property="current_page", type="integer", example=1),
+     *                 @OA\Property(property="from", type="integer", example=1),
+     *                 @OA\Property(property="last_page", type="integer", example=10),
+     *                 @OA\Property(property="per_page", type="integer", example=20),
+     *                 @OA\Property(property="to", type="integer", example=20),
+     *                 @OA\Property(property="total", type="integer", example=200)
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad request"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error"
+     *     )
+     * )
      */
     public function index(Request $request): AnonymousResourceCollection
     {
