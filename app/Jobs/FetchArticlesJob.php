@@ -2,32 +2,39 @@
 
 namespace App\Jobs;
 
-use App\Services\SourceFactory;
+use App\Enums\SourceEnums;
 use App\Services\SourceService;
+use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class FetchArticlesJob implements ShouldQueue
 {
     use Queueable;
 
-    public string $source;
+    public SourceEnums $source;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($source)
+    public function __construct(SourceEnums $source)
     {
         $this->source = $source;
     }
 
     /**
      * Execute the job.
+     * @throws Exception
      */
-    public function handle(): void
+    public function handle(SourceService $service): void
     {
-        $provider = SourceFactory::fromService($this->source);
-        $service = new SourceService($provider);
-        $service->insertArticles();
+        try {
+            $service->insertArticles($this->source);
+        } catch (Throwable $e) {
+            Log::error('Failed to insert articles source: ' . $this->source->value);
+            report($e);
+        }
     }
 }

@@ -2,18 +2,24 @@
 
 namespace App\Services\Adaptor;
 
+use App\DTOs\ArticleDTO;
 use App\Enums\SourceEnums;
+use App\Interfaces\NewsAdapterInterface;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
-class NewsApi
+class NewsApiAdapter implements NewsAdapterInterface
 {
     /**
-     * @param array $article
+     * @param array|object $article
      * @return array
+     * @throws ValidationException
      */
-    public function transform(array $article): array
+    public function transform(array|object $article): array
     {
-        return [
+        $article = (array) $article;
+        return ArticleDTO::fromArray([
             'title' => $article['title'] ?? 'No Title',
             'snippet' => Str::limit($article['description'] ?? '', 500, '...'),
             'content' => $article['content'] ?? 'no content',
@@ -22,7 +28,7 @@ class NewsApi
             'source_id' => md5($article['url'] ?? uniqid()),
             'author' => $article['author'] ?? 'Unknown',
             'category' => null,
-            'published_at' => $article['publishedAt'] ?? now()->toISOString(),
-        ];
+            'published_at' => Carbon::parse($article['publishedAt'])->format('Y-m-d H:i:s') ?? now()->format('Y-m-d H:i:s'),
+        ])->toArray();
     }
 }

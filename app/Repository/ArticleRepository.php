@@ -4,11 +4,11 @@ namespace App\Repository;
 
 use App\Interfaces\ArticleInterface;
 use App\Models\Article;
-use Exception;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class ArticleRepository implements ArticleInterface
 {
@@ -24,9 +24,9 @@ class ArticleRepository implements ArticleInterface
 
     /**
      * @param $data
-     * @return array|void
+     * @return array
      */
-    public function insertOrUpdate($data)
+    public function insertOrUpdate($data): array
     {
         if (empty($data)) {
             return [];
@@ -43,12 +43,14 @@ class ArticleRepository implements ArticleInterface
             });
 
             return $data;
-        } catch (Exception $e) {
-            Log::error('ArticleRepository: Failed to insert articles', ['error' => $e->getMessage()]);
+        } catch (Throwable $e) {
+            Log::error('Failed to insert articles ArticleRepository ');
+            report($e);
+            return [];
         }
     }
 
-    public function getArticles(array $filters = [], int $perPage = 20): LengthAwarePaginator
+    public function getArticles(array $filters = [], int $perPage = 20, string $orderBy = 'published_at', string $direction = 'desc'): LengthAwarePaginator
     {
         $query = $this->query;
         if ( ! empty($filters['category'])) {
@@ -67,16 +69,16 @@ class ArticleRepository implements ArticleInterface
             $query->keyword($filters['keyword']);
         }
 
-        return $this->orderBy()->paginate($perPage);
+        return $this->orderBy($orderBy, $direction)->paginate($perPage);
     }
 
-    public function search($keyword)
+    public function search($keyword): Builder
     {
         return $this->query->keyword($keyword);
     }
 
-    public function orderBy(): Builder
+    public function orderBy($orderBy, $direction): Builder
     {
-        return $this->query->orderBy('published_at', 'desc');
+        return $this->query->orderBy($orderBy, 'desc');
     }
 }

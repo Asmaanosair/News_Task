@@ -3,23 +3,12 @@
 namespace App\Services\Strategy;
 
 use App\Interfaces\NewsInterface;
-use App\Services\Adaptor\NewsCred;
 
 class NewsCredService implements NewsInterface
 {
-    /**
-     * @var NewsCred
-     */
-    protected NewsCred $newsCred;
-
-    public function __construct()
-    {
-        $this->newsCred = new NewsCred();
-    }
-
     public function fetchArticles(): array
     {
-        $articles = [
+        return [
             [
                 'article_id' => 'NC-101',
                 'headline' => 'Global Warming Update',
@@ -41,7 +30,5 @@ class NewsCredService implements NewsInterface
                 'date_published' => '2024-12-19T12:00:00Z',
             ],
         ];
-
-        return array_map([$this->newsCred, 'transform'], $articles);
     }
 }

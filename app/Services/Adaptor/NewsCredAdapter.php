@@ -2,18 +2,22 @@
 
 namespace App\Services\Adaptor;
 
+use App\DTOs\ArticleDTO;
 use App\Enums\SourceEnums;
+use App\Interfaces\NewsAdapterInterface;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
-class NewsCred
+class NewsCredAdapter implements NewsAdapterInterface
 {
     /**
      * @param array $article
      * @return array
+     * @throws ValidationException
      */
     public function transform(array $article): array
     {
-        return [
+        return ArticleDTO::fromArray([
             'title' => $article['headline'],
             'snippet' => Str::limit($article['summary'] ?? '', 500, '...'),
             'content' => $article['body'] ?? 'no content',
@@ -22,7 +26,7 @@ class NewsCred
             'source_id' => $article['article_id'],
             'author' => $article['writer'] ?? 'no author',
             'category' => $article['topic'] ?? null,
-            'published_at' =>now()->toISOString(),
-        ];
+            'published_at' =>now()->format('Y-m-d H:i:s'),
+        ])->toArray();
     }
 }

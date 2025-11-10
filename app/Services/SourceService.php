@@ -2,30 +2,28 @@
 
 namespace App\Services;
 
+use App\Enums\SourceEnums;
 use App\Interfaces\ArticleInterface;
-use App\Interfaces\NewsInterface;
 
 class SourceService
 {
-    protected NewsInterface $provider;
+    private ArticleInterface $repository;
 
-    protected ArticleInterface $repository;
-
-    /**
-     * @param NewsInterface $provider
-     */
-    public function __construct(NewsInterface $provider)
+    public function __construct(ArticleInterface $repository)
     {
-        $this->provider = $provider;
-        $this->repository = app(ArticleInterface::class);
+        $this->repository = $repository;
     }
 
     /**
+     * @param SourceEnums $source
      * @return array
      */
-    public function insertArticles(): array
+    public function insertArticles(SourceEnums $source): array
     {
-        $data = $this->provider->fetchArticles();
+        $provider = SourceFactory::fromService($source->value);
+        $articles = $provider->fetchArticles();
+        $adapter = SourceFactory::fromAdapter($source->value);
+        $data = array_map([$adapter, 'transform'], $articles);
         $this->repository->insertOrUpdate($data);
 
         return $data;

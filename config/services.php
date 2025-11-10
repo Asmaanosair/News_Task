@@ -38,8 +38,9 @@ return [
         'key' => env('NEWS_API_KEY'),
         'sources' => env('NEWS_API_SOURCES', 'bbc-news,cnn,the-guardian'),
         'language' => env('NEWS_API_LANGUAGE', 'en'),
+        'country' => env('NEWS_API_COUNTRY', 'us'),
         'page_size' => env('NEWS_API_PAGE_SIZE', 100),
-        'days_back' => env('NEWS_API_DAYS_BACK', 7),
+        'page' => env('NEWS_API_PAGE', 1),
     ],
 
     'news_cred' => [

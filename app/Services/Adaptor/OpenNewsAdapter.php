@@ -2,18 +2,22 @@
 
 namespace App\Services\Adaptor;
 
+use App\DTOs\ArticleDTO;
 use App\Enums\SourceEnums;
+use App\Interfaces\NewsAdapterInterface;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
-class OpenNews
+class OpenNewsAdapter implements NewsAdapterInterface
 {
     /**
      * @param array $article
      * @return array
+     * @throws ValidationException
      */
     public function transform(array $article): array
     {
-        return [
+        return ArticleDTO::fromArray([
             'title' => $article['title'] ?? 'no title',
             'snippet' => Str::limit($article['description'] ?? '', 500, '...'),
             'content' => $article['content'] ?? 'no content',
@@ -22,7 +26,7 @@ class OpenNews
             'source_id' => $article['id'],
             'author' => $article['author'] ?? 'no author',
             'category' => $article['category'] ?? null,
-            'published_at' => now()->toISOString(),
-        ];
+            'published_at' => now()->format('Y-m-d H:i:s'),
+        ])->toArray();
     }
 }
