@@ -2,9 +2,10 @@
 
 namespace App\Traits;
 
+use Illuminate\Database\Eloquent\Builder;
 trait searchTrait
 {
-    public function scopeKeyword($query, $keyword)
+    public function scopeKeyword($query, $keyword):Builder
     {
         if (empty($this->searchColumns) || empty($keyword)) {
             return $query;
