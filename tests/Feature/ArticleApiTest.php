@@ -18,12 +18,12 @@ class ArticleApiTest extends TestCase
             'category' => 'Technology',
             'source' => 'news_api',
         ]);
-        
+
         Article::factory()->count(3)->create([
             'category' => 'Business',
             'source' => 'news_cred',
         ]);
-        
+
         Article::factory()->count(2)->create([
             'category' => 'Sports',
             'source' => 'open_news',
@@ -76,7 +76,7 @@ class ArticleApiTest extends TestCase
 
         $response->assertStatus(200);
         $this->assertEquals(5, $response->json('meta.total'));
-        
+
         foreach ($response->json('data') as $article) {
             $this->assertEquals('Technology', $article['category']);
         }
@@ -88,7 +88,7 @@ class ArticleApiTest extends TestCase
 
         $response->assertStatus(200);
         $this->assertEquals(5, $response->json('meta.total'));
-        
+
         foreach ($response->json('data') as $article) {
             $this->assertEquals('news_api', $article['source']);
         }
@@ -100,7 +100,7 @@ class ArticleApiTest extends TestCase
 
         $response->assertStatus(200);
         $this->assertEquals(2, $response->json('meta.total'));
-        
+
         foreach ($response->json('data') as $article) {
             $this->assertEquals('John Doe', $article['author']);
         }
@@ -116,7 +116,7 @@ class ArticleApiTest extends TestCase
 
         $response->assertStatus(200);
         $this->assertGreaterThanOrEqual(1, $response->json('meta.total'));
-        
+
         $foundArticle = collect($response->json('data'))->firstWhere('id', $article->id);
         $this->assertNotNull($foundArticle);
     }
@@ -139,11 +139,11 @@ class ArticleApiTest extends TestCase
         $response = $this->getJson('/api/articles?orderBy=title&direction=asc');
 
         $response->assertStatus(200);
-        
+
         $titles = collect($response->json('data'))->pluck('title')->toArray();
         $sortedTitles = $titles;
         sort($sortedTitles);
-        
+
         $this->assertEquals($sortedTitles, $titles);
     }
 
@@ -152,11 +152,11 @@ class ArticleApiTest extends TestCase
         $response = $this->getJson('/api/articles?orderBy=published_at&direction=desc');
 
         $response->assertStatus(200);
-        
+
         $dates = collect($response->json('data'))->pluck('published_at')->toArray();
         $sortedDates = $dates;
         rsort($sortedDates);
-        
+
         $this->assertEquals($sortedDates, $dates);
     }
 
@@ -184,7 +184,7 @@ class ArticleApiTest extends TestCase
 
         $response->assertStatus(200);
         $this->assertEquals(3, $response->json('meta.per_page'));
-        
+
         foreach ($response->json('data') as $article) {
             $this->assertEquals('Technology', $article['category']);
             $this->assertEquals('news_api', $article['source']);
@@ -289,14 +289,13 @@ class ArticleApiTest extends TestCase
         // Make 61 requests (limit is 60 per minute)
         for ($i = 0; $i < 61; $i++) {
             $response = $this->getJson('/api/articles');
-            
+
             if ($i < 60) {
                 $response->assertStatus(200);
             }
         }
-        
+
         // The 61st request should be throttled
         $response->assertStatus(429);
     }
 }
-

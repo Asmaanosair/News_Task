@@ -72,7 +72,10 @@ Automatically fetches new articles periodically.
 ```bash
 # Already running inside Docker container
 php artisan schedule:work
+php artisan app:fetch-articles
 ```
+# Run all tests
+php artisan test
 
 ### 3. Manual Article Fetch
 If you need to manually fetch articles:
