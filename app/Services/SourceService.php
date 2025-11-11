@@ -31,6 +31,7 @@ readonly class SourceService
         if ( ! empty($validData)) {
             $this->repository->insertOrUpdate($validData);
         }
+
         return $validData;
     }
 
@@ -47,6 +48,7 @@ readonly class SourceService
                 return $adapter->transform($article);
             } catch (ValidationException $e) {
                 Log::warning("Validation failed from {$source->value}", $e->errors());
+
                 return null;
             }
         }, $articles);

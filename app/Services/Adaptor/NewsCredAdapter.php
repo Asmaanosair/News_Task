@@ -16,7 +16,7 @@ class NewsCredAdapter implements NewsAdapterInterface
      * @return array
      * @throws ValidationException
      */
-    public function transform(array|object  $article): array
+    public function transform(array|object $article): array
     {
         return ArticleDTO::fromArray([
             'title' => $article['title'] ?? 'No Title',
